@@ -1,2 +1,13 @@
 @import "tailwindcss";
-@plugin "daisyui";
+@plugin "daisyui"{
+    themes : light --default
+}
+@plugin "daisyui/theme" {
+  default: true;
+
+  /* Zaffro Brand Colors */
+  --color-primary: #000B58;     /* Navy Blue */
+  --color-secondary: #FDEB9E;   /* Soft Yellow */
+  --color-accent: #006A67;      /* Teal */
+  --color-neutral: #003161;     /* Royal Blue as neutral */
+}
