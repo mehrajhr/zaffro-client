@@ -14,7 +14,11 @@ const MainLayouts = () => {
       <main className="max-w-7xl mx-auto p-5 md:px-10 md:py-5 ">
         <Outlet></Outlet>
       </main>
-      <Footer></Footer>
+      <footer className="bg-black">
+        <div className="max-w-7xl mx-auto md:px-10">
+            <Footer></Footer>
+        </div>
+      </footer>
     </div>
   );
 };
