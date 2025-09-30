@@ -10,7 +10,7 @@ const About = () => {
     <div className="min-h-screen bg-base-100 text-neutral">
 
       {/* Hero Section */}
-      <section className="relative bg-primary text-secondary py-20 px-5 md:px-20 flex flex-col md:flex-row items-center gap-10 overflow-hidden">
+      <section className="relative bg-white text-black py-20 px-5 md:px-20 flex flex-col md:flex-row items-center gap-10 overflow-hidden">
         {/* Text */}
         <motion.div
           className="md:w-1/2"
@@ -42,21 +42,21 @@ const About = () => {
           </p>
           <Link
             to="/products"
-            className="btn btn-secondary text-primary font-bold px-8 py-3 hover:bg-accent transition"
+            className="btn btn-primary text-white font-bold px-8 py-3 hover:bg-accent transition"
           >
             Explore Products
           </Link>
         </motion.div>
 
         {/* Image */}
-        <motion.div
+        {/* <motion.div
           className="md:w-1/2"
           initial={{ opacity: 0, x: 50 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 1 }}
         >
          <ZaffroLogo/>
-        </motion.div>
+        </motion.div> */}
       </section>
 
       {/* Features / Highlights */}

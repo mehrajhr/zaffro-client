@@ -10,6 +10,7 @@ import About from '../Pages/About/About';
 import Contact from '../Pages/Contact/Contact';
 import Cart from '../Pages/Cart/Cart';
 import All from '../Pages/Products/All';
+import PoloShirts from '../Pages/Products/PoloShirts';
 
 const router = createBrowserRouter([
   {
@@ -31,6 +32,10 @@ const router = createBrowserRouter([
       {
         path: '/products/t-shirts',
         Component: Tshirt
+      },
+      {
+        path: '/products/polo-shirts',
+        Component: PoloShirts
       },
       {
         path: '/new-arrivals',
