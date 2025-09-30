@@ -2,15 +2,12 @@ import React from 'react';
 import { createBrowserRouter } from 'react-router';
 import MainLayouts from '../Layouts/MainLayouts';
 import Home from '../Pages/Home/Home';
-import Hoodies from '../Pages/Products/Hoodies';
-import Tshirt from '../Pages/Products/Tshirt';
 import NewArrivals from '../Pages/NewArrivals/NewArrivals';
 import Offers from '../Pages/Sale/Offers';
 import About from '../Pages/About/About';
 import Contact from '../Pages/Contact/Contact';
 import Cart from '../Pages/Cart/Cart';
-import All from '../Pages/Products/All';
-import PoloShirts from '../Pages/Products/PoloShirts';
+import Products from '../Pages/Products/Products';
 
 const router = createBrowserRouter([
   {
@@ -23,19 +20,7 @@ const router = createBrowserRouter([
       },
       {
         path: '/products',
-        Component: All
-      },
-      {
-        path: '/products/hoodies',
-        Component: Hoodies
-      },
-      {
-        path: '/products/t-shirts',
-        Component: Tshirt
-      },
-      {
-        path: '/products/polo-shirts',
-        Component: PoloShirts
+        Component: Products
       },
       {
         path: '/new-arrivals',

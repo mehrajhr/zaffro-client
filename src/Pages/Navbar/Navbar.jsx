@@ -13,23 +13,9 @@ const Navbar = () => {
 
       {/* Shop Dropdown */}
       <li tabIndex={0}>
-        <details>
-          <summary className="hover:text-secondary hover:bg-primary">Products</summary>
-          <ul className="p-2 bg-base-100 text-neutral rounded-box w-40 z-50">
-            <li>
-              <Link to="/products">All</Link>
-            </li>
-            <li>
-              <Link to="/products/t-shirts">T-Shirts</Link>
-            </li>
-            <li>
-              <Link to="/products/t-shirts">Polo Shirts</Link>
-            </li>
-            <li>
-              <Link to="/products/hoodies">Hoodies</Link>
-            </li>
-          </ul>
-        </details>
+       <Link to='/products'>
+        Products
+       </Link>
       </li>
 
       {/* New Arrivals */}
