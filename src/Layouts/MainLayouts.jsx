@@ -11,7 +11,7 @@ const MainLayouts = () => {
             <Navbar></Navbar>
         </div>
       </header>
-      <main className="max-w-7xl mx-auto p-5 md:px-10 md:py-5 ">
+      <main className="max-w-7xl mx-auto md:p-5 md:px-10 md:py-5 ">
         <Outlet></Outlet>
       </main>
       <footer className="bg-black">

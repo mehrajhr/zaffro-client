@@ -17,10 +17,13 @@ const Navbar = () => {
           <summary className="hover:text-secondary hover:bg-primary">Products</summary>
           <ul className="p-2 bg-base-100 text-neutral rounded-box w-40 z-50">
             <li>
-              <Link to="/product/hoodies">Hoodies</Link>
+              <Link to="/products">All</Link>
             </li>
             <li>
-              <Link to="/product/t-shirts">T-Shirts</Link>
+              <Link to="/products/hoodies">Hoodies</Link>
+            </li>
+            <li>
+              <Link to="/products/t-shirts">T-Shirts</Link>
             </li>
           </ul>
         </details>

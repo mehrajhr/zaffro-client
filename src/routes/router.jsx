@@ -9,6 +9,7 @@ import Offers from '../Pages/Sale/Offers';
 import About from '../Pages/About/About';
 import Contact from '../Pages/Contact/Contact';
 import Cart from '../Pages/Cart/Cart';
+import All from '../Pages/Products/All';
 
 const router = createBrowserRouter([
   {
@@ -20,11 +21,15 @@ const router = createBrowserRouter([
         Component: Home
       },
       {
-        path: '/product/hoodies',
+        path: '/products',
+        Component: All
+      },
+      {
+        path: '/products/hoodies',
         Component: Hoodies
       },
       {
-        path: '/product/t-shirts',
+        path: '/products/t-shirts',
         Component: Tshirt
       },
       {
