@@ -12,19 +12,19 @@ const Navbar = () => {
     <>
       {/* Home */}
       <li>
-        <Link to="/">Home</Link>
+        <Link to="/" className="w-fit">Home</Link>
       </li>
 
       {/* Shop Dropdown */}
-      <li tabIndex={0}>
-       <Link to='/products'>
+      <li>
+       <Link to='/products' className="w-fit">
         Products
        </Link>
       </li>
 
       {/* New Arrivals */}
       <li>
-        <Link to="/new-arrivals">
+        <Link to="/new-arrivals" className="w-fit">
           New Arrivals
           <span className="ml-1 bg-accent text-primary text-xs px-1 rounded max-w-fit">New</span>
         </Link>
@@ -32,7 +32,7 @@ const Navbar = () => {
 
       {/* Sale / Discounts */}
       <li>
-        <Link to="/sale/offers" >
+        <Link to="/sale/offers" className="w-fit">
           Sale
           <span className="ml-1 bg-red-500 text-white text-xs px-1 rounded max-w-fit">Hot</span>
         </Link>
@@ -40,12 +40,12 @@ const Navbar = () => {
 
       {/* About */}
       <li>
-        <Link to="/about">About</Link>
+        <Link to="/about" className="w-fit">About</Link>
       </li>
 
       {/* Contact */}
       <li>
-        <Link to="/contact">Contact</Link>
+        <Link to="/contact" className="w-fit">Contact</Link>
       </li>
     </>
   );
