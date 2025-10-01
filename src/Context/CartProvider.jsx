@@ -14,7 +14,15 @@ const CartProvider = ({ children }) => {
   }, [cart]);
 
   const addToCart = (product) => {
-    setCart((prevCart) => [...prevCart, product]);
+    setCart((prevCart) => {
+      // check if same product with same size exists
+      const exists = prevCart.some(
+        (item) =>
+          item._id === product._id && item.selectedSize === product.selectedSize
+      );
+      if (exists) return prevCart; // don’t duplicate
+      return [...prevCart, product];
+    });
   };
 
   const removeFromCart = (id) => {
