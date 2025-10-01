@@ -4,11 +4,11 @@ import useCart from "../../hooks/useCart";
 
 const ProductCard = ({ product }) => {
   const { addToCart, removeFromCart, isInCart } = useCart();
-  const inCart = isInCart(product.id);
+  const inCart = isInCart(product._id);
 
   const handleCart = () => {
     if (inCart) {
-      removeFromCart(product.id);
+      removeFromCart(product._id);
       toast("Removed from cart", { duration: 2000 });
     } else {
       addToCart(product);

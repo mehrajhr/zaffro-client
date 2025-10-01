@@ -2,8 +2,12 @@ import { Link } from "react-router";
 import { ShoppingCart, User } from "lucide-react";
 import ZaffroLogo from "../../logo/ZaffroLogo";
 import './Navbar.css';
+import useCart from "../../hooks/useCart";
 
 const Navbar = () => {
+  const {getCartCount} = useCart();
+  const items = getCartCount();
+  console.log(items);
   const lists = (
     <>
       {/* Home */}
@@ -78,7 +82,7 @@ const Navbar = () => {
         <Link to="/cart" className="relative">
           <ShoppingCart size={24} />
           <span className="absolute -top-2 -right-2 bg-secondary text-primary text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
-            2
+            {items}
           </span>
         </Link>
 
