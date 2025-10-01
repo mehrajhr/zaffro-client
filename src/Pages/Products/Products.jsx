@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { FiChevronDown, FiChevronUp } from "react-icons/fi";
 import { Toaster } from "react-hot-toast";
 import ProductCard from "./ProductCard";
+import { motion } from "framer-motion";
 
 const Products = () => {
   const [products, setProducts] = useState([]);
@@ -18,16 +19,22 @@ const Products = () => {
       .then((data) => {
         // Client-side price sort
         if (priceSort === "asc") {
-          data.sort((a, b) => (a.discountPrice || a.price) - (b.discountPrice || b.price));
+          data.sort(
+            (a, b) =>
+              (a.discountPrice || a.price) - (b.discountPrice || b.price)
+          );
         } else if (priceSort === "desc") {
-          data.sort((a, b) => (b.discountPrice || b.price) - (a.discountPrice || a.price));
+          data.sort(
+            (a, b) =>
+              (b.discountPrice || b.price) - (a.discountPrice || a.price)
+          );
         }
         setProducts(data);
       });
   }, [category, priceSort]);
 
   return (
-    <div className="container mx-auto px-4 py-6 flex flex-col lg:flex-row gap-6">
+    <div className="px-4 py-6 flex flex-col lg:flex-row gap-6">
       <Toaster position="top-right" />
 
       {/* Sidebar Filter */}
@@ -81,7 +88,15 @@ const Products = () => {
       {/* Product Grid */}
       <div className="w-full lg:w-3/4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {products.map((product) => (
-          <ProductCard key={product._id} product={product} />
+          <motion.div
+            key={product._id}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            whileHover={{ scale: 1.03 }}
+            transition={{ duration: 0.3 }}
+          >
+            <ProductCard product={product} />
+          </motion.div>
         ))}
       </div>
     </div>

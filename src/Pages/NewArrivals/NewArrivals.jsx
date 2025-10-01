@@ -38,7 +38,7 @@ const NewArrivals = () => {
   }, [category, priceSort]);
 
   return (
-    <div className="container mx-auto px-4 py-8 flex flex-col gap-8">
+    <div className="  px-4 py-8 flex flex-col gap-8">
       <Toaster position="top-right" />
 
       {/* Hero Section */}
@@ -131,10 +131,15 @@ const NewArrivals = () => {
         {/* Product Grid */}
         <div className="w-full lg:w-3/4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {products.map((product) => (
-            <ProductCard
+            <motion.div
               key={product._id}
-              product={{ ...product, isNewArrival: true }}
-            />
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              whileHover={{ scale: 1.03 }}
+              transition={{ duration: 0.3 }}
+            >
+              <ProductCard product={{ ...product, isNewArrival: true }} />
+            </motion.div>
           ))}
         </div>
       </div>
