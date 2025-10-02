@@ -8,13 +8,6 @@ const ProductCard = ({ product }) => {
   const inCart = isInCart(product._id);
 
   const handleCart = () => {
-    if (inCart) {
-      // Remove directly if already in cart
-      removeFromCart(product._id);
-      toast("Removed from cart", { duration: 2000 });
-      return;
-    }
-
     // ✅ Show Size Selection Modal
     Swal.fire({
       title: `<h2 class="text-xl font-bold text-black">${product.name}</h2>`,
@@ -133,13 +126,9 @@ const ProductCard = ({ product }) => {
         <div className="mt-auto">
           <button
             onClick={handleCart}
-            className={`w-full py-2 rounded-lg font-semibold transition-colors duration-200 ${
-              inCart
-                ? "bg-transparent border border-red-500 text-red-500 hover:bg-red-500 hover:text-white"
-                : "bg-secondary text-primary hover:bg-primary hover:text-white"
-            }`}
+            className="w-full py-2 rounded-lg font-semibold transition-colors duration-200 bg-secondary text-primary hover:bg-primary hover:text-white"
           >
-            {inCart ? "Remove from Cart" : "Add to Cart"}
+           Add to Cart
           </button>
         </div>
       </div>
