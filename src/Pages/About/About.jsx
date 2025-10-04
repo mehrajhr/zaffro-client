@@ -49,22 +49,22 @@ const About = () => {
         </motion.div>
 
         {/* Image */}
-        {/* <motion.div
+        <motion.div
           className="md:w-1/2"
           initial={{ opacity: 0, x: 50 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 1 }}
         >
          <ZaffroLogo/>
-        </motion.div> */}
+        </motion.div>
       </section>
 
       {/* Features / Highlights */}
       <section className="py-20 px-5 md:px-20 bg-base-200">
-        <h2 className="text-4xl font-bold text-center mb-12">Why Choose Zaffro?</h2>
+        <h2 className="text-4xl font-bold text-center mb-12 text-black">Why Choose Zaffro?</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
           <motion.div 
-            className="bg-white p-8 rounded-2xl shadow-lg text-center"
+            className="bg-white text-black p-8 rounded-2xl shadow-lg text-center"
             whileHover={{ scale: 1.05 }}
           >
             <FaTshirt size={50} className="mx-auto mb-4 text-primary" />
@@ -72,7 +72,7 @@ const About = () => {
             <p>High-quality fabrics ensure comfort, durability, and style in every product.</p>
           </motion.div>
           <motion.div 
-            className="bg-white p-8 rounded-2xl shadow-lg text-center"
+            className="bg-white text-black p-8 rounded-2xl shadow-lg text-center"
             whileHover={{ scale: 1.05 }}
           >
             <FaTruck size={50} className="mx-auto mb-4 text-accent" />
@@ -80,7 +80,7 @@ const About = () => {
             <p>Our efficient logistics ensure your orders arrive quickly and safely.</p>
           </motion.div>
           <motion.div 
-            className="bg-white p-8 rounded-2xl shadow-lg text-center"
+            className="bg-white text-black p-8 rounded-2xl shadow-lg text-center"
             whileHover={{ scale: 1.05 }}
           >
             <FaHandshake size={50} className="mx-auto mb-4 text-secondary" />
@@ -89,29 +89,15 @@ const About = () => {
           </motion.div>
         </div>
       </section>
-
-      {/* Mission Section */}
-      <section className="py-20 px-5 md:px-20 bg-accent text-white rounded-tl-3xl rounded-tr-3xl">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-4xl font-bold mb-6">Our Mission</h2>
-          <p className="text-lg md:text-xl leading-relaxed mb-4">
-            Our mission is to empower people to express themselves through fashion, providing high-quality, stylish apparel that fits every lifestyle.
-          </p>
-          <p className="text-lg md:text-xl leading-relaxed">
-            We believe in sustainability, comfort, and delivering exceptional value with every purchase.
-          </p>
-        </div>
-      </section>
-
       {/* CTA Section */}
-      <section className="py-20 px-5 md:px-20 bg-primary text-secondary text-center">
+      <section className="py-20 px-5 md:px-20 bg-green-500 text-secondary text-center rounded-t-xl">
         <h2 className="text-4xl md:text-5xl font-bold mb-6">Join the Zaffro Community</h2>
         <p className="text-lg md:text-xl mb-8 max-w-2xl mx-auto">
           Explore our latest collections and discover your perfect style. Fashion has never been this effortless.
         </p>
         <Link
           to="/products"
-          className="btn btn-secondary text-primary font-bold px-10 py-4 hover:bg-accent transition"
+          className="btn btn-secondary text-white font-bold px-10 py-4 hover:bg-accent transition"
         >
           Explore Products
         </Link>

@@ -22,7 +22,7 @@ const ProductCard = ({ product }) => {
                 <button 
                   class="size-btn px-4 py-2 rounded-lg font-semibold transition ${
                     s.stock > 0
-                      ? "bg-black text-white hover:bg-secondary hover:text-primary"
+                      ? "bg-black text-white hover:bg-base-200 hover:text-black"
                       : "bg-gray-700 text-gray-400 cursor-not-allowed line-through"
                   }"
                   data-size="${s.size}" 
@@ -106,16 +106,16 @@ const ProductCard = ({ product }) => {
 
       {/* Product Info */}
       <div className="p-4 flex flex-col flex-1">
-        <h3 className="font-semibold text-lg text-white mb-1">{product.name}</h3>
+        <h3 className="font-semibold text-lg text-black mb-1">{product.name}</h3>
 
         {/* Price */}
         {product.discountPrice ? (
           <div className="flex items-center gap-2 mb-2">
             <span className="text-gray-400 line-through">{product.price} BDT</span>
-            <span className="text-white font-bold">{product.discountPrice} BDT</span>
+            <span className="text-black font-bold">{product.discountPrice} BDT</span>
           </div>
         ) : (
-          <span className="text-white font-bold mb-2">{product.price} BDT</span>
+          <span className="text-black font-bold mb-2">{product.price} BDT</span>
         )}
 
         <span className="text-sm text-secondary capitalize mb-4">
@@ -126,7 +126,7 @@ const ProductCard = ({ product }) => {
         <div className="mt-auto">
           <button
             onClick={handleCart}
-            className="w-full py-2 rounded-lg font-semibold transition-colors duration-200 bg-secondary text-primary hover:bg-primary hover:text-white"
+            className="w-full py-2 rounded-lg font-semibold transition-colors duration-200 bg-secondary text-white cursor-pointer"
           >
            Add to Cart
           </button>

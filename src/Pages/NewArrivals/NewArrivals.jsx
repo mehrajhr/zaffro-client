@@ -4,12 +4,16 @@ import { Toaster } from "react-hot-toast";
 import ProductCard from "../Products/ProductCard";
 import { Link } from "react-router";
 import { motion } from "framer-motion";
+import Loading from "../Loading/Loading";
+import ErrorMessage from "../ErrorMessage/ErrorMessage";
 
 const NewArrivals = () => {
   const [products, setProducts] = useState([]);
   const [category, setCategory] = useState("all");
   const [priceSort, setPriceSort] = useState(""); // asc | desc
   const [showCategory, setShowCategory] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
   const categories = ["all", "hoodie", "tshirt", "poloshirt"];
 
@@ -34,8 +38,19 @@ const NewArrivals = () => {
           );
         }
         setProducts(data);
+        setLoading(false);
+      })
+      .catch(() => {
+        setError(true);
+        setLoading(false);
       });
   }, [category, priceSort]);
+
+  if (loading) {
+    return <Loading></Loading>;
+  }
+
+  if (error) return <ErrorMessage></ErrorMessage>;
 
   return (
     <div className="  px-4 py-8 flex flex-col gap-8">
@@ -58,7 +73,7 @@ const NewArrivals = () => {
             out!
           </p>
           <Link to="/products">
-            <button className="mt-6 px-6 py-3 bg-primary text-white font-semibold rounded-lg shadow-md hover:bg-neutral transition duration-300">
+            <button className="mt-6 px-6 py-3 bg-primary text-white font-semibold rounded-lg shadow-md hover:bg-neutral hover:text-black cursor-pointer transition duration-300">
               Shop All
             </button>
           </Link>
@@ -99,8 +114,8 @@ const NewArrivals = () => {
                     onClick={() => setCategory(cat)}
                     className={`px-4 py-2 rounded-full font-semibold capitalize transition-all duration-200 ${
                       category === cat
-                        ? "bg-secondary"
-                        : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                        ? "bg-secondary text-white"
+                        : "bg-base-200 text-black hover:bg-base-300"
                     }`}
                   >
                     {cat}

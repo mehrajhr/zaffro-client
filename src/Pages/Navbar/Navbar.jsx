@@ -1,4 +1,4 @@
-import { Link } from "react-router";
+import { Link, NavLink } from "react-router";
 import { ShoppingCart, User } from "lucide-react";
 import ZaffroLogo from "../../logo/ZaffroLogo";
 import './Navbar.css';
@@ -12,40 +12,40 @@ const Navbar = () => {
     <>
       {/* Home */}
       <li>
-        <Link to="/" className="w-fit">Home</Link>
+        <NavLink to="/" className="w-fit">Home</NavLink>
       </li>
 
       {/* Shop Dropdown */}
       <li>
-       <Link to='/products' className="w-fit">
+       <NavLink to='/products' className="w-fit">
         Products
-       </Link>
+       </NavLink>
       </li>
 
       {/* New Arrivals */}
       <li>
-        <Link to="/new-arrivals" className="w-fit">
+        <NavLink to="/new-arrivals" className="w-fit">
           New Arrivals
-          <span className="ml-1 bg-accent text-primary text-xs px-1 rounded max-w-fit">New</span>
-        </Link>
+          <span className="bg-accent text-white text-xs px-1 rounded max-w-fit">New</span>
+        </NavLink>
       </li>
 
       {/* Sale / Discounts */}
       <li>
-        <Link to="/sale/offers" className="w-fit">
+        <NavLink to="/sale/offers" className="w-fit">
           Sale
-          <span className="ml-1 bg-red-500 text-white text-xs px-1 rounded max-w-fit">Hot</span>
-        </Link>
+          <span className="bg-red-500 text-white text-xs px-1 rounded max-w-fit">Hot</span>
+        </NavLink>
       </li>
 
       {/* About */}
       <li>
-        <Link to="/about" className="w-fit">About</Link>
+        <NavLink to="/about" className="w-fit">About</NavLink>
       </li>
 
       {/* Contact */}
       <li>
-        <Link to="/contact" className="w-fit">Contact</Link>
+        <NavLink to="/contact" className="w-fit">Contact</NavLink>
       </li>
     </>
   );
@@ -56,12 +56,12 @@ const Navbar = () => {
       <div className="navbar-start">
         {/* Mobile Menu Dropdown */}
         <div className="dropdown lg:hidden">
-          <label tabIndex={0} className="btn btn-ghost text-xl">
+          <label tabIndex={0} className="btn btn-ghost text-black text-xl">
             ☰
           </label>
           <ul
             tabIndex={0}
-            className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 text-neutral rounded-box w-52"
+            className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-200 text-black rounded-box w-52"
           >
             {lists}
           </ul>
@@ -73,15 +73,15 @@ const Navbar = () => {
 
       {/* Center Menu (Desktop only) */}
       <div className="navbar-center hidden lg:flex">
-        <ul className="menu menu-horizontal gap-4 text-lg">{lists}</ul>
+        <ul className="menu menu-horizontal gap-4 text-lg text-black">{lists}</ul>
       </div>
 
       {/* Right Side (Cart + Login) */}
       <div className="navbar-end flex items-center gap-4">
         {/* Cart */}
         <Link to="/cart" className="relative">
-          <ShoppingCart size={24} />
-          <span className="absolute -top-2 -right-2 bg-secondary text-primary text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+          <ShoppingCart className="text-black" size={24} />
+          <span className="absolute -top-2 -right-2 bg-secondary text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
             {items}
           </span>
         </Link>
@@ -89,7 +89,7 @@ const Navbar = () => {
         {/* Login/Register */}
         <Link
           to="/login"
-          className="btn btn-secondary text-primary font-semibold"
+          className="btn text-primary font-semibold"
         >
           <User size={18} className="mr-1" />
           Login

@@ -3,12 +3,16 @@ import { FiChevronDown, FiChevronUp } from "react-icons/fi";
 import { Toaster } from "react-hot-toast";
 import { motion } from "framer-motion";
 import ProductCard from "../Products/ProductCard";
+import Loading from "../Loading/Loading";
+import ErrorMessage from "../ErrorMessage/ErrorMessage";
 
 const Offers = () => {
   const [products, setProducts] = useState([]);
   const [category, setCategory] = useState("all");
   const [priceSort, setPriceSort] = useState(""); // asc | desc
   const [showCategory, setShowCategory] = useState(false);
+  const [error, setError] = useState(false);
+  const [loading , setLoading] = useState(true);
 
   const categories = ["all", "hoodie", "tshirt", "poloshirt"];
 
@@ -21,16 +25,31 @@ const Offers = () => {
       .then((data) => {
         if (priceSort === "asc") {
           data.sort(
-            (a, b) => (a.discountPrice || a.price) - (b.discountPrice || b.price)
+            (a, b) =>
+              (a.discountPrice || a.price) - (b.discountPrice || b.price)
           );
         } else if (priceSort === "desc") {
           data.sort(
-            (a, b) => (b.discountPrice || b.price) - (a.discountPrice || a.price)
+            (a, b) =>
+              (b.discountPrice || b.price) - (a.discountPrice || a.price)
           );
         }
         setProducts(data);
+        setLoading(false);
+      })
+      .catch(() => {
+        setError(true);
+        setLoading(false);
       });
   }, [category, priceSort]);
+
+  if(loading){
+    return <Loading></Loading>
+  }
+
+  if(error){
+    return <ErrorMessage></ErrorMessage>
+  }
 
   return (
     <div className="container mx-auto px-4 py-8 flex flex-col gap-8">
@@ -41,14 +60,14 @@ const Offers = () => {
         <div className="bg-base-200 p-8 lg:p-16 rounded-lg flex flex-col lg:flex-row items-center justify-between gap-6 border border-accent/30">
           {/* Left Text */}
           <div className="text-neutral max-w-lg flex flex-col gap-4">
-            <h1 className="text-3xl lg:text-5xl font-extrabold tracking-tight">
+            <h1 className="text-3xl lg:text-5xl font-extrabold tracking-tight text-black">
               Hot Deals Just For You!
             </h1>
             <p className="text-lg text-base-content/80">
               Check out the latest discounts on hoodies, t-shirts, and polos.
               Only limited stock available – don’t miss out!
             </p>
-            <button className="btn btn-secondary text-primary w-max px-6 py-3 font-semibold hover:scale-105 transition-transform duration-300">
+            <button className="btn btn-secondary text-white w-max px-6 py-3 font-semibold hover:scale-105 transition-transform duration-300">
               Shop Now
             </button>
           </div>
@@ -85,8 +104,8 @@ const Offers = () => {
                     onClick={() => setCategory(cat)}
                     className={`px-4 py-2 rounded-full font-semibold capitalize transition-all duration-200 ${
                       category === cat
-                        ? "bg-secondary text-primary"
-                        : "bg-base-100 text-neutral hover:bg-base-300"
+                        ? "bg-secondary text-white"
+                        : "bg-base-100 text-black hover:bg-base-300"
                     }`}
                   >
                     {cat}

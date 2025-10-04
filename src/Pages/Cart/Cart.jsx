@@ -107,7 +107,7 @@ const Cart = () => {
       showCancelButton: true,
       confirmButtonText: "Confirm Order",
       cancelButtonText: "Edit",
-      confirmButtonColor: "#2563eb",
+      confirmButtonColor: "#000B58",
       width: 600,
     });
 
@@ -116,7 +116,7 @@ const Cart = () => {
         title: "Order confirmed!",
         html: `<p>Thank you — your order is placed. Our team will contact you very soon.</p>`,
         icon: "success",
-        confirmButtonColor: "#2563eb",
+        confirmButtonColor: "#000B58",
       });
 
       clearCart();

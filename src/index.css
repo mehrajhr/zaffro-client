@@ -6,8 +6,8 @@
   default: true;
 
   /* Zaffro Brand Colors */
-  --color-primary: #000B58;     /* Navy Blue */
-  --color-secondary: #FDEB9E;   /* Soft Yellow */
-  --color-accent: #006A67;      /* Teal */
-  --color-neutral: #003161;     /* Royal Blue as neutral */
+  --color-primary: #000000;     /* Navy Blue */
+  --color-secondary: #000000;   /* Soft Yellow */
+  --color-accent: #000000;      /* Teal */
+  --color-neutral: #FFFFFF;     /* Royal Blue as neutral */
 }

@@ -7,7 +7,6 @@ const Footer = () => {
   return (
     <footer className="footer footer-horizontal footer-center bg-black text-primary-content p-10">
       <aside>
-        <ZaffroLogo></ZaffroLogo>
         <p>Copyright © {new Date().getFullYear()} - All rights reserved by Zaffro</p>
       </aside>
       <nav>

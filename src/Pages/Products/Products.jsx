@@ -3,6 +3,8 @@ import { FiChevronDown, FiChevronUp } from "react-icons/fi";
 import { Toaster } from "react-hot-toast";
 import ProductCard from "./ProductCard";
 import { motion } from "framer-motion";
+import Loading from "../Loading/Loading";
+import ErrorMessage from "../ErrorMessage/ErrorMessage";
 
 const Products = () => {
   const [products, setProducts] = useState([]);
@@ -11,6 +13,9 @@ const Products = () => {
   const [showCategory, setShowCategory] = useState(false);
 
   const categories = ["all", "hoodie", "tshirt", "poloshirt"];
+
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     let url = `http://localhost:5000/products?category=${category}`;
@@ -30,8 +35,22 @@ const Products = () => {
           );
         }
         setProducts(data);
+        setLoading(false);
+      })
+      .catch(() => {
+        setError(true);
+        setLoading(false);
       });
   }, [category, priceSort]);
+
+  if (loading) {
+    return <Loading></Loading>;
+  }
+
+  if (error)
+    return (
+      <ErrorMessage></ErrorMessage>
+    );
 
   return (
     <div className="px-4 py-6 flex flex-col lg:flex-row gap-6">
@@ -56,8 +75,8 @@ const Products = () => {
                   onClick={() => setCategory(cat)}
                   className={`px-4 py-2 rounded-full font-semibold capitalize transition-all duration-200 ${
                     category === cat
-                      ? "bg-secondary text-primary"
-                      : "bg-base-100 text-neutral hover:bg-base-300"
+                      ? "bg-secondary text-white"
+                      : "bg-base-100 text-black hover:bg-base-300"
                   }`}
                 >
                   {cat}
