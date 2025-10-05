@@ -15,6 +15,7 @@ import ManageProducts from '../Dashborad/ManageProducts/ManageProducts';
 import Orders from '../Dashborad/Orders/Orders';
 import Users from '../Dashborad/Users/Users';
 import AddProduct from '../Dashborad/ManageProducts/AddProduct';
+import EditProduct from '../Dashborad/ManageProducts/EditProduct';
 
 const router = createBrowserRouter([
   {
@@ -78,6 +79,10 @@ const router = createBrowserRouter([
       {
         path: '/dashboard/add-product',
         Component: AddProduct
+      },
+      {
+        path: '/dashboard/edit-product/:id',
+        Component: EditProduct
       }
     ]
   }
