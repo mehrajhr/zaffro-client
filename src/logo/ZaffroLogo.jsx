@@ -6,7 +6,7 @@ const ZaffroLogo = () => {
     <div className="flex flex-col items-center justify-center text-center select-none">
       {/* Main ZAFFRO text */}
       <Link to='/'>
-        <h1 className="text-2xl md:text-3xl lg:text-4xl font-serif font-bold tracking-widest text-secondary">
+        <h1 className="text-xl md:text-2xl lg:text-3xl font-serif font-bold tracking-widest text-secondary">
           ZAFFRO
         </h1>
       </Link>

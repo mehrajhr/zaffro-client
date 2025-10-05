@@ -47,6 +47,9 @@ const Navbar = () => {
       <li>
         <NavLink to="/contact" className="w-fit">Contact</NavLink>
       </li>
+      <li>
+        <NavLink to="/dashboard" className="w-fit">Dashboard</NavLink>
+      </li>
     </>
   );
 

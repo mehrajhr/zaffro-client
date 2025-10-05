@@ -9,6 +9,11 @@ import Contact from '../Pages/Contact/Contact';
 import Cart from '../Pages/Cart/Cart';
 import Products from '../Pages/Products/Products';
 import ProductDetails from '../Pages/Products/ProductDetails';
+import DashLayouts from '../Layouts/DashLayouts';
+import Overview from '../Dashborad/Overview/Overview';
+import ManageProducts from '../Dashborad/ManageProducts/ManageProducts';
+import Orders from '../Dashborad/Orders/Orders';
+import Users from '../Dashborad/Users/Users';
 
 const router = createBrowserRouter([
   {
@@ -49,6 +54,28 @@ const router = createBrowserRouter([
       }
     ]
   },
+  {
+    path: '/dashboard',
+    Component: DashLayouts,
+    children: [
+      {
+        path:'/dashboard',
+        Component: Overview
+      },
+      {
+        path: '/dashboard/manage-products',
+        Component: ManageProducts
+      },
+      {
+        path: '/dashboard/orders',
+        Component: Orders
+      },
+      {
+        path: '/dashboard/manage-users',
+        Component: Users
+      }
+    ]
+  }
 ]);
 
 export default router;
