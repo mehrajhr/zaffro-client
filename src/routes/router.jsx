@@ -14,6 +14,7 @@ import Overview from '../Dashborad/Overview/Overview';
 import ManageProducts from '../Dashborad/ManageProducts/ManageProducts';
 import Orders from '../Dashborad/Orders/Orders';
 import Users from '../Dashborad/Users/Users';
+import AddProduct from '../Dashborad/ManageProducts/AddProduct';
 
 const router = createBrowserRouter([
   {
@@ -59,7 +60,7 @@ const router = createBrowserRouter([
     Component: DashLayouts,
     children: [
       {
-        path:'/dashboard',
+        index: true,
         Component: Overview
       },
       {
@@ -73,6 +74,10 @@ const router = createBrowserRouter([
       {
         path: '/dashboard/manage-users',
         Component: Users
+      },
+      {
+        path: '/dashboard/add-product',
+        Component: AddProduct
       }
     ]
   }

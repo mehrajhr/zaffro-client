@@ -1,61 +1,77 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, NavLink, Outlet } from "react-router";
-import { Home, Package, ShoppingCart, Users, Settings } from "lucide-react"; // icons
+import { Home, Package, ShoppingCart, Users, Menu, X, Plus } from "lucide-react";
 import ZaffroLogo from "../logo/ZaffroLogo";
 
 const DashLayouts = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const navLinks = [
+    { to: "/dashboard", label: "Overview", icon: <Home size={18} /> },
+    {
+      to: "/dashboard/manage-products",
+      label: "Products",
+      icon: <Package size={18} />,
+    },
+    {
+      to: "/dashboard/orders",
+      label: "Orders",
+      icon: <ShoppingCart size={18} />,
+    },
+    {
+      to: "/dashboard/manage-users",
+      label: "Users",
+      icon: <Users size={18} />,
+    },
+    {
+      to: "/dashboard/add-product",
+      label: "Add Product",
+      icon: <Plus size={18} />,
+    },
+  ];
+
   return (
     <div className="min-h-screen bg-neutral text-gray-200 flex flex-col">
-      {/* 🔝 Top Navigation Bar */}
+      {/* Top Navigation Bar */}
       <div className="w-full border-b border-gray-700 bg-base-100 py-3 px-6 flex items-center justify-between">
-        {/* Logo */}
-        <Link to="/" className="flex items-center gap-2">
-          <ZaffroLogo className="h-8 w-8" />
-          <span className="font-bold text-lg tracking-wide text-white">
-            Zaffro Dashboard
-          </span>
-        </Link>
+        
+        <ZaffroLogo/>
+
+        {/* Mobile Menu Button */}
+        <button
+          className="md:hidden text-black"
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
+        >
+          {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+        </button>
       </div>
 
-      {/* 🧱 Main Grid Layout */}
-      <div className="flex flex-1 overflow-hidden">
-        {/* Left Sidebar */}
-        <aside className="w-1/4 max-w-xs bg-base-100 border-r border-gray-700 p-6 hidden md:flex flex-col justify-between">
+      {/*  Main Grid Layout */}
+      <div className="flex flex-1 overflow-hidden relative">
+        {/* Sidebar (Desktop) */}
+        <aside className="hidden md:flex w-1/4 max-w-xs bg-base-100 border-r border-gray-700 p-6 flex-col justify-between">
           <nav className="space-y-4">
             <h3 className="uppercase text-sm font-semibold text-gray-900 mb-3">
               Dashboard Menu
             </h3>
-            <NavLink
-              to="/dashboard"
-              className="flex bg-base-300 text-black items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-800 hover:text-white transition"
-            >
-              <Home size={18} />
-              <span>Overview</span>
-            </NavLink>
 
-            <NavLink
-              to="/dashboard/manage-products"
-              className="flex bg-base-300 text-black items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-800 hover:text-white transition"
-            >
-              <Package size={18} />
-              <span>Products</span>
-            </NavLink>
-
-            <NavLink
-              to="/dashboard/orders"
-              className="flex bg-base-300 text-black items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-800 hover:text-white transition"
-            >
-              <ShoppingCart size={18} />
-              <span>Orders</span>
-            </NavLink>
-
-            <NavLink
-              to="/dashboard/manage-users"
-              className="flex bg-base-300 text-black items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-800 hover:text-white transition"
-            >
-              <Users size={18} />
-              <span>Users</span>
-            </NavLink>
+            {navLinks.map((link) => (
+              <NavLink
+                key={link.to}
+                to={link.to}
+                end
+                className={({ isActive }) =>
+                  `flex items-center gap-3 px-3 py-2 rounded-lg transition ${
+                    isActive
+                      ? "bg-gray-800 text-white"
+                      : "bg-base-300 text-black hover:bg-gray-800 hover:text-white"
+                  }`
+                }
+              >
+                {link.icon}
+                <span>{link.label}</span>
+              </NavLink>
+            ))}
           </nav>
 
           {/* Footer */}
@@ -69,8 +85,59 @@ const DashLayouts = () => {
 
         {/* Right Main Content */}
         <main className="flex-1 bg-base-200 p-6 overflow-y-auto">
-          <Outlet></Outlet>
+          <Outlet />
         </main>
+
+        {/* Mobile Sidebar (Slide-in Menu) */}
+        <div
+          className={`fixed inset-0 bg-black/50 z-40 transition-opacity duration-300 ${
+            isMenuOpen ? "opacity-100 visible" : "opacity-0 invisible"
+          }`}
+          onClick={() => setIsMenuOpen(false)}
+        ></div>
+
+        <aside
+          className={`fixed top-0 left-0 h-full w-64 bg-base-100 border-r border-gray-700 p-6 z-50 transform transition-transform duration-300 md:hidden ${
+            isMenuOpen ? "translate-x-0" : "-translate-x-full"
+          }`}
+        >
+          <div className="flex items-center justify-between mb-6">
+            <Link
+              to="/"
+              className="flex items-center gap-2"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              <ZaffroLogo className="h-8 w-8" />
+              <span className="font-bold text-lg tracking-wide text-white">
+                Zaffro
+              </span>
+            </Link>
+            <button className="text-white" onClick={() => setIsMenuOpen(false)}>
+              <X size={24} />
+            </button>
+          </div>
+
+          <nav className="space-y-3">
+            {navLinks.map((link) => (
+              <NavLink
+                key={link.to}
+                to={link.to}
+                end
+                className={({ isActive }) =>
+                  `flex items-center gap-3 px-3 py-2 rounded-lg transition ${
+                    isActive
+                      ? "bg-gray-800 text-white"
+                      : "bg-base-300 text-black hover:bg-gray-800 hover:text-white"
+                  }`
+                }
+                onClick={() => setIsMenuOpen(false)}
+              >
+                {link.icon}
+                <span>{link.label}</span>
+              </NavLink>
+            ))}
+          </nav>
+        </aside>
       </div>
     </div>
   );
