@@ -1,9 +1,11 @@
+// src/Pages/Cart/Cart.jsx
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { Toaster } from "react-hot-toast";
 import toast from "react-hot-toast";
 import { HiOutlineTrash } from "react-icons/hi";
+import { Plus, Minus } from "lucide-react";
 import useCart from "../../hooks/useCart";
 
 const DELIVERY_CHITTAGONG = 70;
@@ -21,10 +23,12 @@ const Cart = () => {
 
   const navigate = useNavigate();
   const [showCheckoutForm, setShowCheckoutForm] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [customer, setCustomer] = useState({
     name: "",
     mobile: "",
     locationType: "inside",
+    location:"",
     paymentMethod: "cod",
     bkashSender: "",
     bkashTxn: "",
@@ -35,20 +39,49 @@ const Cart = () => {
     customer.locationType === "inside" ? DELIVERY_CHITTAGONG : DELIVERY_OUTSIDE;
   const total = subtotal + (cart.length ? deliveryFee : 0);
 
+  // --- Stock helper ---
+  const getStockForSize = (item) => {
+    if (Array.isArray(item.sizes)) {
+      const wanted = (item.selectedSize || "").toString().toUpperCase();
+      const found = item.sizes.find(
+        (s) => String(s.size).toUpperCase() === wanted
+      );
+      return found ? Number(found.stock || 0) : 0;
+    }
+    if (item.sizeStock && typeof item.sizeStock === "object") {
+      return Number(item.sizeStock[item.selectedSize] ?? 0);
+    }
+    return 0;
+  };
+
+  // --- Quantity handlers ---
   const onIncrease = (item) => {
-    const newQty = Math.min((item.quantity || 1) + 1, 3);
-    updateQuantity(item._id, item.selectedSize, newQty);
+    const pid = item._id ?? item.id;
+    const stockForSize = getStockForSize(item);
+    const newQty = (item.quantity || 1) + 1;
+
+    if (stockForSize === 0) {
+      toast.error(`${item.selectedSize} is out of stock.`);
+      return;
+    }
+    if (newQty > stockForSize) {
+      toast.error(`Only ${stockForSize} available for ${item.selectedSize}.`);
+      return;
+    }
+    updateQuantity(pid, item.selectedSize, newQty);
   };
 
   const onDecrease = (item) => {
+    const pid = item._id ?? item.id;
     const newQty = (item.quantity || 1) - 1;
     if (newQty <= 0) {
-      removeFromCart(item._id, item.selectedSize);
+      removeFromCart(pid, item.selectedSize);
     } else {
-      updateQuantity(item._id, item.selectedSize, newQty);
+      updateQuantity(pid, item.selectedSize, newQty);
     }
   };
 
+  // --- Proceed to checkout ---
   const handleProceed = () => {
     if (!cart.length) {
       toast.error("Your cart is empty.");
@@ -58,6 +91,7 @@ const Cart = () => {
     window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
   };
 
+  // --- Confirm Order ---
   const handleConfirmOrder = async (e) => {
     e.preventDefault();
 
@@ -73,54 +107,83 @@ const Cart = () => {
       return;
     }
 
-    const lines = cart.map(
-      (it, idx) =>
-        `${idx + 1}. ${it.name} — ${it.selectedSize} x${it.quantity || 1} — ${
-          (it.discountPrice ?? it.price) * (it.quantity || 1)
-        } BDT`
-    );
-    lines.push(`Subtotal: ${subtotal} BDT`);
-    lines.push(`Delivery: ${deliveryFee} BDT`);
-    lines.push(`Total: ${total} BDT`);
+    const orderPayload = {
+      customer: {
+        name: customer.name,
+        mobile: customer.mobile,
+        locationType: customer.locationType,
+        location:customer.location,
+        paymentMethod: customer.paymentMethod,
+        bkashSender: customer.bkashSender || null,
+        bkashTxn: customer.bkashTxn || null,
+      },
+      items: cart.map((it) => {
+        const pid = it._id ?? it.id;
+        const unitPrice = it.discountPrice ?? it.price ?? 0;
+        return {
+          productId: pid,
+          name: it.name,
+          size: it.selectedSize,
+          quantity: it.quantity || 1,
+          unitPrice,
+          subtotal: unitPrice * (it.quantity || 1),
+          image: it.images?.[0] ?? null,
+        };
+      }),
+      subtotal,
+      deliveryFee,
+      total,
+      status: "pending",
+      createdAt: new Date().toISOString(),
+    };
 
-    const htmlSummary = `
-      <div style="text-align:left;">
-        <p><strong>Name:</strong> ${customer.name}</p>
-        <p><strong>Mobile:</strong> ${customer.mobile}</p>
-        <p><strong>Location:</strong> ${
-          customer.locationType === "inside"
-            ? "Chittagong City"
-            : "Outside Chittagong"
-        }</p>
-        <p><strong>Payment:</strong> ${
-          customer.paymentMethod === "bkash" ? "bKash" : "Cash on Delivery"
-        }</p>
-        <hr/>
-        <p><strong>Order:</strong></p>
-        <div>${lines.join("<br/>")}</div>
-      </div>
-    `;
+    try {
+      setLoading(true);
 
-    const result = await Swal.fire({
-      title: "Confirm your order",
-      html: htmlSummary,
-      showCancelButton: true,
-      confirmButtonText: "Confirm Order",
-      cancelButtonText: "Edit",
-      confirmButtonColor: "#000B58",
-      width: 600,
-    });
+      const res = await fetch("http://localhost:5000/orders", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(orderPayload),
+      });
 
-    if (result.isConfirmed) {
+      const data = await res.json();
+
+      // ✅ Handle backend failure or insufficient stock
+      if (!res.ok || !data.success) {
+        const msg =
+          data.message || "Order failed due to stock or server issue.";
+        toast.error(msg);
+
+        await Swal.fire({
+          title: "Order Failed!",
+          text: msg,
+          icon: "error",
+          confirmButtonColor: "#000B58",
+        });
+
+        return;
+      }
+
+      // ✅ Success
       await Swal.fire({
         title: "Order confirmed!",
-        html: `<p>Thank you — your order is placed. Our team will contact you very soon.</p>`,
+        html: `<p>Your order (${data.orderId}) has been placed successfully.</p>`,
         icon: "success",
         confirmButtonColor: "#000B58",
       });
 
       clearCart();
       navigate("/", { replace: true });
+    } catch (err) {
+      console.error("Order submit error:", err);
+      await Swal.fire({
+        title: "Network Error",
+        text: "Something went wrong while placing your order. Please try again.",
+        icon: "error",
+        confirmButtonColor: "#000B58",
+      });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -145,10 +208,14 @@ const Cart = () => {
             <div className="lg:col-span-2 flex flex-col gap-4">
               {cart.map((item) => {
                 const unitPrice = item.discountPrice ?? item.price ?? 0;
-                const lineTotal = unitPrice * (item.quantity || 1);
+                const qty = item.quantity || 1;
+                const stockForSize = getStockForSize(item);
+                const lineTotal = unitPrice * qty;
+                const pid = item._id ?? item.id;
+
                 return (
                   <div
-                    key={`${item._id}-${item.selectedSize}`}
+                    key={`${pid}-${item.selectedSize}`}
                     className="bg-white p-4 rounded-lg shadow flex gap-4"
                   >
                     <div className="w-24 h-24 rounded overflow-hidden border">
@@ -169,12 +236,23 @@ const Cart = () => {
                           <p className="text-sm text-gray-600">
                             Price: {unitPrice} BDT
                           </p>
+                          <p
+                            className={`text-sm font-medium ${
+                              stockForSize > 0
+                                ? "text-green-600"
+                                : "text-red-500"
+                            }`}
+                          >
+                            {stockForSize > 0
+                              ? `Stock: ${stockForSize}`
+                              : "Out of stock"}
+                          </p>
                         </div>
                         <div className="text-right">
                           <p className="font-semibold">{lineTotal} BDT</p>
                           <button
                             onClick={() =>
-                              removeFromCart(item._id, item.selectedSize)
+                              removeFromCart(pid, item.selectedSize)
                             }
                             className="mt-2 text-sm text-red-500 hover:underline flex items-center gap-1"
                           >
@@ -187,20 +265,25 @@ const Cart = () => {
                       <div className="mt-3 flex items-center gap-3">
                         <button
                           onClick={() => onDecrease(item)}
-                          className="px-3 py-1 border rounded hover:bg-gray-100"
+                          className="p-2 border rounded hover:bg-gray-100"
                         >
-                          -
+                          <Minus size={14} />
                         </button>
+
                         <span className="px-3 py-1 border rounded bg-gray-50">
-                          {item.quantity || 1}
+                          {qty}
                         </span>
+
                         <button
                           onClick={() => onIncrease(item)}
-                          className="px-3 py-1 border rounded hover:bg-gray-100"
+                          className="p-2 border rounded hover:bg-gray-100"
                         >
-                          +
+                          <Plus size={14} />
                         </button>
-                        <p className="text-sm text-gray-500">Max 3</p>
+
+                        <p className="text-sm text-gray-500">
+                          Max: {stockForSize}
+                        </p>
                       </div>
                     </div>
                   </div>
@@ -229,130 +312,100 @@ const Cart = () => {
                 onClick={handleProceed}
                 className="mt-4 w-full btn btn-primary"
               >
-                Proceed to Order
+                Proceed to Checkout
               </button>
             </div>
           </div>
         )}
 
-        {/* Checkout form */}
-        {showCheckoutForm && cart.length && (
+        {/* Checkout Form */}
+        {showCheckoutForm && cart.length > 0 && (
           <form
             onSubmit={handleConfirmOrder}
             className="mt-8 bg-white p-6 rounded-lg shadow max-w-3xl mx-auto"
           >
-            <h2 className="text-xl font-semibold mb-4">Delivery & Payment</h2>
+            <h3 className="text-xl font-semibold mb-4">Checkout Details</h3>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm mb-1">Full name</label>
-                <input
-                  className="input input-bordered w-full"
-                  value={customer.name}
-                  onChange={(e) =>
-                    setCustomer((s) => ({ ...s, name: e.target.value }))
-                  }
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-sm mb-1">Mobile number</label>
-                <input
-                  className="input input-bordered w-full"
-                  value={customer.mobile}
-                  onChange={(e) =>
-                    setCustomer((s) => ({ ...s, mobile: e.target.value }))
-                  }
-                  required
-                />
-              </div>
-              <div className="md:col-span-2">
-                <label className="block text-sm mb-1">Location</label>
-                <div className="flex gap-6">
-                  <label className="flex items-center gap-2">
-                    <input
-                      type="radio"
-                      name="location"
-                      checked={customer.locationType === "inside"}
-                      onChange={() =>
-                        setCustomer((s) => ({ ...s, locationType: "inside" }))
-                      }
-                    />
-                    Inside Chittagong ({DELIVERY_CHITTAGONG} BDT)
-                  </label>
-                  <label className="flex items-center gap-2">
-                    <input
-                      type="radio"
-                      name="location"
-                      checked={customer.locationType === "outside"}
-                      onChange={() =>
-                        setCustomer((s) => ({ ...s, locationType: "outside" }))
-                      }
-                    />
-                    Outside Chittagong ({DELIVERY_OUTSIDE} BDT)
-                  </label>
-                </div>
-              </div>
+            <div className="grid md:grid-cols-2 gap-4">
+              <input
+                type="text"
+                placeholder="Full Name"
+                className="input input-bordered w-full"
+                value={customer.name}
+                onChange={(e) =>
+                  setCustomer({ ...customer, name: e.target.value })
+                }
+                required
+              />
+              <input
+                type="text"
+                placeholder="Mobile Number"
+                className="input input-bordered w-full"
+                value={customer.mobile}
+                onChange={(e) =>
+                  setCustomer({ ...customer, mobile: e.target.value })
+                }
+                required
+              />
             </div>
 
-            <div className="mt-6">
-              <h3 className="font-semibold mb-2">Payment method</h3>
-              <div className="flex flex-col gap-2">
-                <label className="flex items-center gap-2">
-                  <input
-                    type="radio"
-                    name="payment"
-                    checked={customer.paymentMethod === "cod"}
-                    onChange={() =>
-                      setCustomer((s) => ({ ...s, paymentMethod: "cod" }))
-                    }
-                  />
-                  Cash on Delivery
-                </label>
-                <label className="flex items-center gap-2">
-                  <input
-                    type="radio"
-                    name="payment"
-                    checked={customer.paymentMethod === "bkash"}
-                    onChange={() =>
-                      setCustomer((s) => ({ ...s, paymentMethod: "bkash" }))
-                    }
-                  />
-                  bKash (manual)
-                </label>
-              </div>
+            <div className="grid md:grid-cols-2 gap-4 mt-4">
+              <select
+                className="select select-bordered w-full"
+                value={customer.locationType}
+                onChange={(e) =>
+                  setCustomer({ ...customer, locationType: e.target.value })
+                }
+              >
+                <option value="inside">Inside Chittagong</option>
+                <option value="outside">Outside Chittagong</option>
+              </select>
 
-              {customer.paymentMethod === "bkash" &&(
-                <div className="mt-4 border p-4 rounded bg-gray-50">
-                  <p className="text-sm mb-2">
-                    Send ( bdt {total}/- ) to <b>+880 1XX-XXX-XXXX</b>
-                    <br />
-                    Make sure to (send money) before submitting the order.
-                  </p>
-                  <label className="block text-sm mb-1">
-                    Your bKash number
-                  </label>
-                  <input
-                    className="input input-bordered w-full mb-2"
-                    value={customer.bkashSender}
-                    onChange={(e) =>
-                      setCustomer((s) => ({
-                        ...s,
-                        bkashSender: e.target.value,
-                      }))
-                    }
-                  />
-                  <label className="block text-sm mb-1">Transaction ID</label>
-                  <input
-                    className="input input-bordered w-full"
-                    value={customer.bkashTxn}
-                    onChange={(e) =>
-                      setCustomer((s) => ({ ...s, bkashTxn: e.target.value }))
-                    }
-                  />
-                </div>
-              )}
+              <input
+                type="text"
+                placeholder= {`Your Location ${customer.locationType} Chittagong`}
+                className="input input-bordered w-full"
+                value={customer.location}
+                onChange={(e) =>
+                  setCustomer({ ...customer, location: e.target.value })
+                }
+                required
+              />
+
+              <select
+                className="select select-bordered w-full"
+                value={customer.paymentMethod}
+                onChange={(e) =>
+                  setCustomer({ ...customer, paymentMethod: e.target.value })
+                }
+              >
+                <option value="cod">Cash on Delivery</option>
+                <option value="bkash">bKash</option>
+              </select>
             </div>
+
+            {customer.paymentMethod === "bkash" && (
+              <div className="grid md:grid-cols-2 gap-4 mt-4">
+                <input
+                  type="text"
+                  placeholder="bKash Sender Number"
+                  className="input input-bordered w-full"
+                  value={customer.bkashSender}
+                  onChange={(e) =>
+                    setCustomer({ ...customer, bkashSender: e.target.value })
+                  }
+                />
+                <input
+                  type="text"
+                  placeholder="Transaction ID"
+                  className="input input-bordered w-full"
+                  value={customer.bkashTxn}
+                  onChange={(e) =>
+                    setCustomer({ ...customer, bkashTxn: e.target.value })
+                  }
+                />
+              </div>
+            )}
 
             <div className="mt-6 flex justify-end gap-3">
               <button
@@ -362,8 +415,12 @@ const Cart = () => {
               >
                 Back
               </button>
-              <button type="submit" className=" btn btn-primary">
-                Confirm Order
+              <button
+                type="submit"
+                disabled={loading}
+                className="btn btn-primary"
+              >
+                {loading ? "Placing Order..." : "Confirm Order"}
               </button>
             </div>
           </form>
