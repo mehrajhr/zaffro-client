@@ -113,6 +113,35 @@ const Orders = () => {
     });
   };
 
+  const deletOrder = (id) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then(async(result) => {
+      if (result.isConfirmed) {
+        try {
+          await axiosSecure.delete(`/orders/${id}`);
+         Swal.fire({
+          title: "Deleted!",
+          text: "Your file has been deleted.",
+          icon: "success",
+        });
+          fetchOrders();
+        } catch (err) {
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Something went wrong!",
+          });
+      }
+  }});
+  };
+
   const printInvoice = (order) => {
     const invoiceWindow = window.open("", "_blank");
 
@@ -146,7 +175,9 @@ const Orders = () => {
 
       <h2>Invoice #${order._id.slice(-6)}</h2>
 
-      <p><b>Order Date:</b> ${new Date(order.createdAt).toLocaleDateString()}</p>
+      <p><b>Order Date:</b> ${new Date(
+        order.createdAt
+      ).toLocaleDateString()}</p>
       <p><b>Customer Name:</b> ${order.customer?.name}</p>
       <p><b>Email:</b> ${order.customer?.email ?? "N/A"}</p>
       <p><b>Phone:</b> ${order.customer?.mobile ?? "N/A"}</p>
@@ -281,19 +312,19 @@ const Orders = () => {
                     onClick={() => handleViewDetails(order)}
                     className="btn btn-sm bg-blue-600 text-white hover:bg-blue-700 flex items-center gap-1"
                   >
-                    <Eye size={16} /> 
+                    <Eye size={16} />
                   </button>
                   <button
                     onClick={() => printInvoice(order)}
                     className="btn btn-sm bg-gray-600 text-white hover:bg-gray-700 flex items-center gap-1"
                   >
-                    <Printer size={16} /> 
+                    <Printer size={16} />
                   </button>
                   <button
-                    onClick={() => printInvoice(order)}
+                    onClick={() => deletOrder(order?._id)}
                     className="btn btn-warning gap-1 btn-sm"
                   >
-                    <Delete size={16} /> 
+                    <Delete size={16} />
                   </button>
                 </td>
               </tr>
