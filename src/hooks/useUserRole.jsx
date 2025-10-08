@@ -11,7 +11,15 @@ const useUserRole = () => {
   const [error, setError] = useState(null);
 
   const fetchUserRole = useCallback(async () => {
-    if (!user || !user?.email || authLoading) return;
+    // Wait until auth finishes loading
+    if (authLoading) return;
+
+    // If no user logged in → clear role and stop loading
+    if (!user?.email) {
+      setRole(null);
+      setRoleLoading(false);
+      return;
+    }
 
     try {
       setRoleLoading(true);
@@ -21,6 +29,7 @@ const useUserRole = () => {
     } catch (err) {
       console.error("Error fetching user role:", err);
       setError(err.message);
+      setRole(null);
     } finally {
       setRoleLoading(false);
     }

@@ -14,7 +14,7 @@ const Offers = () => {
   const [error, setError] = useState(false);
   const [loading , setLoading] = useState(true);
 
-  const categories = ["all", "hoodie", "tshirt", "poloshirt"];
+  const categories = ["all", "hoodie", "tshirt", "poloshirt" , "jacket" , "drop-sholder"];
 
   useEffect(() => {
     let url = `https://zaffro-server.vercel.app/products/discounts`;
@@ -134,7 +134,7 @@ const Offers = () => {
 
         {/* Product Grid with motion */}
         <div className="w-full lg:w-3/4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {products.map((product) => (
+          {products && products.map((product) => (
             <motion.div
               key={product._id}
               initial={{ opacity: 0, y: 20 }}

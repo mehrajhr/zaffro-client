@@ -142,6 +142,8 @@ const AddProduct = () => {
               <option value="poloshirt">Poloshirt</option>
               <option value="tshirt">T-Shirt</option>
               <option value="hoodie">Hoodie</option>
+              <option value="jacket">Jacket</option>
+              <option value="drop-sholder">Drop Shoulder</option>
             </select>
           </div>
         </div>

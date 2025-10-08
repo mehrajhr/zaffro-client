@@ -168,7 +168,6 @@ const Orders = () => {
     </head>
     <body>
       <div class="header">
-        <img src="/public/zaffrologo.png" alt="Zaffro Logo" class="logo"/>
         <div>
           <h3>Zaffro</h3>
           <p>https://zaffro.netlify.app/</p>

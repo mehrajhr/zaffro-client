@@ -12,7 +12,7 @@ const Products = () => {
   const [priceSort, setPriceSort] = useState(""); // asc | desc
   const [showCategory, setShowCategory] = useState(false);
 
-  const categories = ["all", "hoodie", "tshirt", "poloshirt"];
+  const categories = ["all", "hoodie", "tshirt", "poloshirt" , "jacket" , "drop-sholder"];
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -106,7 +106,7 @@ const Products = () => {
 
       {/* Product Grid */}
       <div className="w-full lg:w-3/4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {products.map((product) => (
+        {products?.map((product) => (
           <motion.div
             key={product._id}
             initial={{ opacity: 0, y: 20 }}

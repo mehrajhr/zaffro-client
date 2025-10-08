@@ -32,6 +32,10 @@ const ProductDetails = () => {
     fetchProduct();
   }, [realId]);
 
+  if(loading){
+    return <Loading></Loading>
+  }
+
   if (!realId || realId.length !== 24 || !product) {
     return <ErrorMessage />;
   }
@@ -52,8 +56,6 @@ const ProductDetails = () => {
     // ✅ Show success toast
     toast.success(`Added ${product.name} (${selectedSize}) to cart`);
   };
-
-  if (loading) return <Loading />;
 
   return (
     <div className="bg-base-200 min-h-screen py-12 px-4">
