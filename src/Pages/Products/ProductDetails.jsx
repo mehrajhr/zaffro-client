@@ -19,7 +19,7 @@ const ProductDetails = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const res = await fetch(`http://localhost:5000/products/${realId}`);
+        const res = await fetch(`https://zaffro-server.vercel.app/products/${realId}`);
         const data = await res.json();
         setProduct(data);
         setSelectedImage(data.images?.[0]);

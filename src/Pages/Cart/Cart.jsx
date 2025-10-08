@@ -140,7 +140,7 @@ const Cart = () => {
     try {
       setLoading(true);
 
-      const res = await fetch("http://localhost:5000/orders", {
+      const res = await fetch("https://zaffro-server.vercel.app/orders", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(orderPayload),

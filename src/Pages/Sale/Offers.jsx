@@ -17,7 +17,7 @@ const Offers = () => {
   const categories = ["all", "hoodie", "tshirt", "poloshirt"];
 
   useEffect(() => {
-    let url = `http://localhost:5000/products/discounts`;
+    let url = `https://zaffro-server.vercel.app/products/discounts`;
     if (category !== "all") url += `?category=${category}`;
 
     fetch(url)

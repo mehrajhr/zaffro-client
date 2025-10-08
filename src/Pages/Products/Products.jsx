@@ -18,7 +18,7 @@ const Products = () => {
   const [error, setError] = useState(false);
 
   useEffect(() => {
-    let url = `http://localhost:5000/products?category=${category}`;
+    let url = `https://zaffro-server.vercel.app/products?category=${category}`;
     fetch(url)
       .then((res) => res.json())
       .then((data) => {

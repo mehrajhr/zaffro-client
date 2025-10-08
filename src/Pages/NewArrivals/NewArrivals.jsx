@@ -18,7 +18,7 @@ const NewArrivals = () => {
   const categories = ["all", "hoodie", "tshirt", "poloshirt"];
 
   useEffect(() => {
-    let url = `http://localhost:5000/products/new-arrivals`;
+    let url = `https://zaffro-server.vercel.app/products/new-arrivals`;
     if (category !== "all") {
       url += `?category=${category}`;
     }

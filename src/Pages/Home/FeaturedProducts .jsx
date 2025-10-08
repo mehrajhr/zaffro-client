@@ -11,7 +11,7 @@ const FeaturedProducts = () => {
   const [error, setError] = useState(false);
 
   useEffect(() => {
-    fetch("http://localhost:5000/products") // replace with your backend URL
+    fetch("https://zaffro-server.vercel.app/products") // replace with your backend URL
       .then((res) => res.json())
       .then((data) => {
         setProducts(data.slice(0, 6)); // show only 6 products
