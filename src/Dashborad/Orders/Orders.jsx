@@ -89,6 +89,8 @@ const Orders = () => {
       })<br/>
         <b>Phone:</b> ${order.customer?.mobile ?? "N/A"}<br/>
         <b>Payment Method:</b> ${order.customer?.paymentMethod}<br/>
+        <b>Bkash Number:</b> ${order.customer?.bkashSender}<br/>
+        <b>Transaction ID:</b> ${order.customer?.bkashTxn}<br/>
         <b>Status:</b> ${order.status}<br/>
         <b>Location: </b> ${order.customer?.location} <br/><br/>
         <b>Items:</b><br/>
@@ -275,7 +277,7 @@ const Orders = () => {
               <th>Date</th>
               <th>Total</th>
               <th>Status</th>
-              <th>Payment</th>
+              <th>Payment Type</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -302,9 +304,9 @@ const Orders = () => {
                 </td>
                 <td>
                   {order.customer?.paymentMethod === "bkash" ? (
-                    <span className="text-green-600 font-semibold">Paid</span>
+                    <span className="text-green-600 font-semibold">Bkash</span>
                   ) : (
-                    <span className="text-red-600 font-semibold">Unpaid</span>
+                    <span className="text-red-600 font-semibold">COD</span>
                   )}
                 </td>
                 <td className="flex gap-2">

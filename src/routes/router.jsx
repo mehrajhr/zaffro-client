@@ -16,6 +16,8 @@ import Orders from '../Dashborad/Orders/Orders';
 import Users from '../Dashborad/Users/Users';
 import AddProduct from '../Dashborad/ManageProducts/AddProduct';
 import EditProduct from '../Dashborad/ManageProducts/EditProduct';
+import Forbidden from '../Pages/Forbidden/Forbidden';
+import AdminRoutes from './AdminRoutes';
 
 const router = createBrowserRouter([
   {
@@ -53,36 +55,40 @@ const router = createBrowserRouter([
       {
         path: '/products/:id',
         Component: ProductDetails
+      },
+      {
+        path: '/forbidden',
+        Component: Forbidden
       }
     ]
   },
   {
     path: '/dashboard',
-    Component: DashLayouts,
+    element: <AdminRoutes><DashLayouts></DashLayouts></AdminRoutes>,
     children: [
       {
         index: true,
-        Component: Overview
+        element: <AdminRoutes> <Overview></Overview> </AdminRoutes>
       },
       {
         path: '/dashboard/manage-products',
-        Component: ManageProducts
+        element: <AdminRoutes> <ManageProducts></ManageProducts></AdminRoutes>
       },
       {
         path: '/dashboard/orders',
-        Component: Orders
+        element: <AdminRoutes> <Orders></Orders> </AdminRoutes>
       },
       {
         path: '/dashboard/manage-users',
-        Component: Users
+        element: <AdminRoutes> <Users></Users> </AdminRoutes>
       },
       {
         path: '/dashboard/add-product',
-        Component: AddProduct
+        element: <AdminRoutes> <AddProduct> </AddProduct> </AdminRoutes>
       },
       {
         path: '/dashboard/edit-product/:id',
-        Component: EditProduct
+        element: <AdminRoutes> <EditProduct></EditProduct> </AdminRoutes>
       }
     ]
   }
