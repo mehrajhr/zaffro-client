@@ -3,6 +3,7 @@ import { useForm, useFieldArray } from "react-hook-form";
 import { useParams, useNavigate } from "react-router";
 import Swal from "sweetalert2";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
+import Loading from "../../Pages/Loading/Loading";
 
 const imgbbApiKey = import.meta.env.VITE_IMAGEBB_KEY;
 
@@ -160,7 +161,7 @@ const EditProduct = () => {
     }
   };
 
-  if (loading) return <div className="text-center p-10">Loading...</div>;
+  if (loading) return <Loading></Loading>;
 
   return (
     <div className="bg-base-200 min-h-screen p-6 rounded-lg">
@@ -194,6 +195,8 @@ const EditProduct = () => {
               <option value="poloshirt">Poloshirt</option>
               <option value="tshirt">T-Shirt</option>
               <option value="hoodie">Hoodie</option>
+              <option value="jacket">Jacket</option>
+              <option value="drop-sholder">Drop Shoulder</option>
             </select>
           </div>
         </div>
